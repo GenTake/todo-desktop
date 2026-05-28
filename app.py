@@ -5,7 +5,7 @@ from tkinter import messagebox
 
 #メインウィンドウの設定
 root = tk.Tk()
-root.title("Todo アプリ")
+root.title("Todo アプリ Ver.B")
 root.geometry("400x500")
 
 #タスクリスト（メモリ上で管理）
