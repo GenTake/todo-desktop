@@ -5,11 +5,8 @@ from tkinter import messagebox
 
 #メインウィンドウの設定
 root = tk.Tk()
-root.title("Todo アプリ")
+root.title("Todo アプリ ver.A")
 root.geometry("400x500")
-
-#タスクリスト（メモリ上で管理）
-task_list = []
 
 SAVE_FILE = "tasks.json"
 
@@ -32,7 +29,6 @@ def add_task():
     if task == "":
         messagebox.showwarning("注意", "タスクを入力してください")
         return
-    task_list.append(task)
     listbox.insert(tk.END, task)
     entry.delete(0, tk.END)
     save_tasks()
@@ -44,7 +40,6 @@ def delete_task():
         return
     index = selected[0]
     listbox.delete(index)
-    task_list.pop(index)
     save_tasks()
 
 def complete_task():
