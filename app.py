@@ -1,4 +1,6 @@
 import tkinter as tk
+import json
+import os
 from tkinter import messagebox
 
 #メインウィンドウの設定
@@ -9,6 +11,22 @@ root.geometry("400x500")
 #タスクリスト（メモリ上で管理）
 task_list = []
 
+SAVE_FILE = "tasks.json"
+
+def save_tasks():
+    data = [listbox.get(i) for i in range(listbox.size())]
+    with open(SAVE_FILE, "w", encoding="utf-8") as f:
+        #PythonのデータをJSON形式でファイルに書き込む
+        json.dump(data, f, ensure_ascii=False)
+
+def load_tasks():
+    if not os.path.exists(SAVE_FILE):
+        return
+    with open(SAVE_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        for task in data:
+            listbox.insert(tk.END, task)
+
 def add_task():
     task = entry.get()
     if task == "":
@@ -17,6 +35,7 @@ def add_task():
     task_list.append(task)
     listbox.insert(tk.END, task)
     entry.delete(0, tk.END)
+    save_tasks()
 
 def delete_task():
     selected = listbox.curselection()
@@ -26,6 +45,7 @@ def delete_task():
     index = selected[0]
     listbox.delete(index)
     task_list.pop(index)
+    save_tasks()
 
 def complete_task():
     selected = listbox.curselection()
@@ -36,6 +56,7 @@ def complete_task():
     if not current.startswith("✓ "):
         listbox.delete(index)
         listbox.insert(index, "✓ " + current)
+    save_tasks()
 
 #タイトルラベル
 label = tk.Label(root, text="Todo アプリ", font=("Arial", 18, "bold"))
@@ -60,5 +81,6 @@ tk.Button(button_frame, text="完了", command=complete_task).pack(side=tk.LEFT,
 tk.Button(button_frame, text="削除", command=delete_task).pack(side=tk.LEFT, padx=5)
 
 #アプリを起動する
+load_tasks()
 root.mainloop()
 
